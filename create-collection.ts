@@ -42,7 +42,7 @@ const transaction = await createNft(umi, {
   mint: collectionMint,
   name: "Cuts collection",
   symbol: "CUTS",
-  uri: "https://",
+  uri: "https://github.com/shricastic/cuts-nft/blob/master/nft-collection-metadata.json",
   sellerFeeBasisPoints: percentAmount(0),
   isCollection: true,
 });
@@ -55,7 +55,7 @@ const createdCollectionNft = await fetchDigitalAsset(
 );
 
 console.log(
-  `created collection! address is${getExplorerLink(
+  `created collection! address is ${getExplorerLink(
     "address",
     createdCollectionNft.mint.publicKey,
     "devnet",
