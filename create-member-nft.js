@@ -13,6 +13,7 @@ import {
   generateSigner,
   keypairIdentity,
   percentAmount,
+  publicKey,
 } from "@metaplex-foundation/umi";
 import { clusterApiUrl, Connection, LAMPORTS_PER_SOL } from "@solana/web3.js";
 
@@ -28,36 +29,38 @@ await airdropIfRequired(
 
 console.log("loaded user", user.publicKey.toBase58());
 
-const umi = createUmi(connection.rpcEndpoint);
-umi.use(mplTokenMetadata());
+const umi = createUmi(connection.rpcEndpoint).use(mplTokenMetadata());
 
 const umiUser = umi.eddsa.createKeypairFromSecretKey(user.secretKey);
 umi.use(keypairIdentity(umiUser));
 
 console.log("set up Umi instance for user");
 
-const collectionMint = generateSigner(umi);
+const collectionAddress = publicKey(
+  "2aRPJzibSJkVcjx4uVz9WZYMaYRauwzrjdb8GZFkTK8y",
+);
+console.log("creating nft member in Cuts collection");
 
+const mint = generateSigner(umi);
 const transaction = await createNft(umi, {
-  mint: collectionMint,
-  name: "Cuts collection",
-  symbol: "CUTS",
-  uri: "https://raw.githubusercontent.com/shricastic/cuts-nft/refs/heads/master/nft-collection-metadata.json",
+  mint,
+  name: "Cuts Nft Behelit",
+  uri: "",
   sellerFeeBasisPoints: percentAmount(0),
-  isCollection: true,
+  collection: {
+    key: collectionAddress,
+    verified: false,
+  },
 });
 
 await transaction.sendAndConfirm(umi);
 
-const createdCollectionNft = await fetchDigitalAsset(
-  umi,
-  collectionMint.publicKey,
-);
-
 console.log(
-  `created collection! address is ${getExplorerLink(
+  `Member Nft created in Cuts collection and Address is: ${getExplorerLink(
     "address",
-    createdCollectionNft.mint.publicKey,
+    createNft.mint.publicKey,
     "devnet",
   )}`,
 );
+
+console.log("Done");
