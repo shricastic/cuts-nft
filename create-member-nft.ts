@@ -45,7 +45,7 @@ const mint = generateSigner(umi);
 const transaction = await createNft(umi, {
   mint,
   name: "Cuts Nft Behelit",
-  uri: "",
+  uri: "https://raw.githubusercontent.com/shricastic/cuts-nft/refs/heads/master/collection-member-metadata.json",
   sellerFeeBasisPoints: percentAmount(0),
   collection: {
     key: collectionAddress,
